@@ -71,10 +71,13 @@
 
   <header class="hero" id="inicio">
     <div class="topbar">
-      <div class="brand"><button class="round" id="openMenu" aria-label="Abrir menu">≋</button><span>Sucupira em revista</span></div>
-      <button class="round" id="installBtn" aria-label="Instalar aplicativo" title="Instalar aplicativo">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 18h14v3H5z"/></svg>
+      <div class="brand"><button class="round" id="openMenu" aria-label="Abrir o portão do menu" title="Abrir menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21V10a8 8 0 0 1 16 0v11M7 21V10a5 5 0 0 1 10 0v11M7 13h10M10 13v8M14 13v8M3 21h18"/></svg>
+      </button><span>Sucupira em revista</span></div>
+      <button class="round" id="photoBtn" aria-label="Escolher foto da capa" title="Escolher foto da capa">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="1"/><circle cx="9" cy="10" r="2"/><path d="m4 18 5-5 3 3 3-3 5 5M18 6v5M15.5 8.5h5"/></svg>
       </button>
+      <input class="sr" id="heroPhoto" type="file" accept="image/*" aria-label="Escolher foto da capa">
     </div>
     <div class="hero-copy">
       <div class="eyebrow">☀ Diretamente de Sucupira</div>
@@ -185,6 +188,14 @@
   function fallback(q){const t=q.toLowerCase();if(t.includes('cemitério'))return 'Ah, criatura, o cemitério é a obra-prima da municipalidade sucupirana — prontíssima, porém desprovida do elemento defuntivo indispensável à inauguração.';if(t.includes('zeca'))return 'Zeca Diabo vive uma contraditoriedade das mais humanas: carrega a fama da violência, mas busca a dignificação de uma vida correta. Até o capítulo 120, essa escolha segue pressionada por todos os lados.';if(t.includes('odor'))return 'Em legítimo odoriquês: trata-se de uma solicitação altamente considerativa, merecedora de apreciação gabinetal e resposta prafrentemente conclusiva.';return 'Minha criatura, a questão é de alta relevância sucupirística. Posso comentar personagens, acontecimentos até o capítulo 120 ou transformar sua frase em odoriquês — sem praticar spoilerismo futuro.'}
   async function send(text){text=text.trim();if(!text)return;chat.push({role:'user',text});renderChat();const typing={role:'bot',text:'Redigindo despacho municipal'};chat.push(typing);renderChat();$('.msg.bot:last-child').classList.add('thinking');try{const history=chat.filter(x=>x!==typing).slice(-10).map(x=>({role:x.role==='bot'?'assistant':'user',content:x.text}));const res=await fetch('/api/odorico',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({messages:history})});if(!res.ok)throw new Error();const data=await res.json();typing.text=data.reply||fallback(text)}catch{typing.text=fallback(text)}renderChat()}
   $('#chatForm').onsubmit=e=>{e.preventDefault();const i=$('#chatInput');send(i.value);i.value='';i.blur()};$$('.quick button').forEach(b=>b.onclick=()=>send(b.dataset.prompt));$('#clearChat').onclick=()=>{if(confirm('Limpar a conversa deste aparelho?')){chat=[defaultMsg];renderChat()}};$('#exportChat').onclick=()=>{const blob=new Blob([chat.map(m=>(m.role==='bot'?'Odorico':'Você')+': '+m.text).join('\n\n')],{type:'text/plain'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='gabinete-de-odorico.txt';a.click();URL.revokeObjectURL(a.href)};
-  let deferred;addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e});$('#installBtn').onclick=async()=>{if(deferred){deferred.prompt();await deferred.userChoice;deferred=null}else alert('No iPhone: toque em Compartilhar e depois em “Adicionar à Tela de Início”.')};if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js'));
+  const PHOTO_DB='sucupira-preferencias',PHOTO_STORE='midia',PHOTO_KEY='capa-principal';let heroPhotoURL='';
+  function photoDB(){return new Promise((resolve,reject)=>{const request=indexedDB.open(PHOTO_DB,1);request.onupgradeneeded=()=>request.result.createObjectStore(PHOTO_STORE);request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error)})}
+  async function saveHeroPhoto(blob){const db=await photoDB();return new Promise((resolve,reject)=>{const tx=db.transaction(PHOTO_STORE,'readwrite');tx.objectStore(PHOTO_STORE).put(blob,PHOTO_KEY);tx.oncomplete=()=>{db.close();resolve()};tx.onerror=()=>reject(tx.error)})}
+  async function getHeroPhoto(){const db=await photoDB();return new Promise((resolve,reject)=>{const tx=db.transaction(PHOTO_STORE,'readonly'),request=tx.objectStore(PHOTO_STORE).get(PHOTO_KEY);request.onsuccess=()=>{db.close();resolve(request.result)};request.onerror=()=>reject(request.error)})}
+  function showHeroPhoto(blob){if(heroPhotoURL)URL.revokeObjectURL(heroPhotoURL);heroPhotoURL=URL.createObjectURL(blob);$('.hero').style.backgroundImage=`url("${heroPhotoURL}")`}
+  $('#photoBtn').onclick=()=>$('#heroPhoto').click();
+  $('#heroPhoto').onchange=async e=>{const file=e.target.files?.[0];if(!file)return;if(!file.type.startsWith('image/'))return alert('Escolha uma imagem da sua galeria.');try{await saveHeroPhoto(file);showHeroPhoto(file)}catch{alert('Não foi possível guardar essa foto. Tente escolher uma imagem menor.')}e.target.value=''};
+  getHeroPhoto().then(blob=>{if(blob)showHeroPhoto(blob)}).catch(()=>{});
+  if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js'));
   </script>
 </body></html>
