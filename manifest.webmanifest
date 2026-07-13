@@ -1,0 +1,15 @@
+{
+  "name": "Sucupira — O Bem-Amado",
+  "short_name": "Sucupira",
+  "description": "Guia de O Bem-Amado com capítulos, moradores, trilha e o Gabinete de Odorico.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fff8e8",
+  "theme_color": "#1d665d",
+  "lang": "pt-BR",
+  "orientation": "portrait-primary",
+  "icons": [
+    {"src":"icons/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
+    {"src":"icons/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
+  ]
+}
