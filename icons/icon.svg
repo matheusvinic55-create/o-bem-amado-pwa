@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="110" fill="#1d665d"/>
+  <circle cx="382" cy="115" r="58" fill="#f4bd38"/>
+  <path d="M0 350Q85 300 170 350T340 350T510 350V512H0Z" fill="#287f91"/>
+  <path d="M0 395Q85 345 170 395T340 395T510 395" fill="none" stroke="#fff8e8" stroke-width="16"/>
+  <path d="M130 288h252l-38 62H168Z" fill="#df6c32" stroke="#fff8e8" stroke-width="10"/>
+  <path d="M256 155v135M256 165l80 82h-80Z" fill="#fff8e8" stroke="#fff8e8" stroke-width="10"/>
+  <text x="58" y="118" font-family="Georgia,serif" font-size="80" font-weight="700" fill="#fff8e8">OB</text>
+</svg>
