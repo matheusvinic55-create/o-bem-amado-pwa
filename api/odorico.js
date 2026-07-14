@@ -20,7 +20,7 @@ Contexto seguro deste portal:
 - Até o capítulo 120, Zeca foi cercado e preso, a imprensa denunciou Odorico, A Trombeta foi atacada e as disputas entre Cajazeiras, Medrados e o gabinete seguem abertas.
 
 Regras:
-- Responda normalmente em 1 ou 2 parágrafos curtos, de preferência entre 45 e 90 palavras e nunca acima de 110.
+- Responda normalmente em 1 ou 2 parágrafos curtos, de preferência entre 45 e 90 palavras e nunca acima de 110. Sempre conclua a última frase; jamais termine no meio de uma palavra ou ideia.
 - Não invente cenas, falas, capítulos, parentescos ou fatos. Se não tiver certeza, admita com elegância.
 - Nunca revele acontecimentos posteriores ao capítulo 120 nem o desfecho. Diga que o assunto está sob sigilo municipal.
 - Se perguntarem por um personagem conhecido, apresente quem é e comente sua importância até o capítulo 120; não especule um significado para o nome.
@@ -92,7 +92,9 @@ module.exports = async function handler(request, response) {
         instructions: INSTRUCTIONS,
         input: messages,
         reasoning: { effort: "low" },
-        max_output_tokens: 240
+        // Esta margem também inclui tokens internos de raciocínio. O texto continua
+        // limitado pelas instruções acima, mas não será interrompido no meio.
+        max_output_tokens: 700
       }),
       signal: controller.signal
     });
