@@ -1,5 +1,5 @@
-const CACHE='sucupira-v17';
-const CORE=['/','/index.html','/manifest.webmanifest','/assets/capa-sucupira.webp','/assets/figurino/odorico-rosto.svg','/assets/personagens/zeca-diabo.svg','/assets/personagens/dr-juarez.svg','/assets/personagens/telma.svg','/assets/personagens/donana.svg','/assets/personagens/gisa.svg','/assets/personagens/ceceu.svg','/assets/personagens/zora.svg','/icons/icon-192.png','/icons/icon-512.png'];
+const CACHE='sucupira-v18';
+const CORE=['/','/index.html','/manifest.webmanifest','/assets/capa-sucupira.webp','/assets/figurino/odorico-corpo.svg','/assets/personagens/zeca-diabo.svg','/assets/personagens/dr-juarez.svg','/assets/personagens/telma.svg','/assets/personagens/donana.svg','/assets/personagens/gisa.svg','/assets/personagens/ceceu.svg','/assets/personagens/zora.svg','/icons/icon-192.png','/icons/icon-512.png'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',e=>{if(e.request.method!=='GET'||new URL(e.request.url).pathname.startsWith('/api/'))return;e.respondWith(fetch(e.request).then(r=>{const copy=r.clone();caches.open(CACHE).then(c=>c.put(e.request,copy));return r}).catch(()=>caches.match(e.request).then(r=>r||caches.match('/index.html'))))});
