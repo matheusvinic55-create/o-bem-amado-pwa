@@ -1031,7 +1031,8 @@
     const resultPanel = document.getElementById('result-panel');
     document.getElementById('odu-name').textContent = odu.name;
     document.getElementById('odu-meaning').textContent = odu.meaning;
-    document.getElementById('odu-interpretation').innerHTML = 
+    const interpretation = document.getElementById('odu-interpretation');
+    interpretation.innerHTML = 
       '<p><strong>Orixá:</strong> <span class="orixa-badge">' + odu.orixa + '</span></p>' +
       '<p>' + odu.interpretation + '</p>';
     document.getElementById('character-quote').innerHTML = 
@@ -1039,6 +1040,12 @@
       '"' + odu.quote.text + '"';
 
     resultPanel.classList.add('active');
+
+    if (currentMode === 'pessoal') {
+      document.getElementById('character-quote').innerHTML =
+        '<span class="speaker">Leitura pessoal:</span><br>“A mesa está organizando as palavras para a sua pergunta...”';
+      requestPersonalReading(questionText, odu, openCount, interpretation);
+    }
 
     history.unshift({
       question: questionText,
@@ -1048,6 +1055,42 @@
     });
 
     updateHistory();
+  }
+
+  function escapeHtml(text) {
+    const node = document.createElement('div');
+    node.textContent = text;
+    return node.innerHTML;
+  }
+
+  function renderPersonalReading(container, odu, reading) {
+    const paragraphs = String(reading).split(/\n{2,}/).map(text => text.trim()).filter(Boolean);
+    container.innerHTML = '<p><strong>Orixá:</strong> <span class="orixa-badge">' + escapeHtml(odu.orixa) + '</span></p>' +
+      paragraphs.map(text => '<p>' + escapeHtml(text) + '</p>').join('');
+  }
+
+  async function requestPersonalReading(question, odu, openCount, container) {
+    try {
+      const response = await fetch('/api/buzios', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          question: question,
+          odu: odu.name,
+          meaning: odu.meaning,
+          orixa: odu.orixa,
+          openCount: openCount
+        })
+      });
+      const data = await response.json();
+      if (!response.ok || !data.reply) throw new Error('Leitura indisponível');
+      renderPersonalReading(container, odu, data.reply);
+      document.getElementById('character-quote').innerHTML =
+        '<span class="speaker">A mesa respondeu:</span><br>“Receba a leitura como uma pausa de consciência, não como um destino fechado.”';
+    } catch (error) {
+      document.getElementById('character-quote').innerHTML =
+        '<span class="speaker">A mesa respondeu:</span><br>“A leitura profunda não pôde chegar agora; acolha o sentido simbólico do Odu que se abriu.”';
+    }
   }
 
   function updateHistory() {
