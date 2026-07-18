@@ -442,37 +442,6 @@
       font-style: normal;
     }
 
-    .history-log {
-      max-height: 150px;
-      overflow-y: auto;
-      margin-top: 12px;
-      padding: 8px;
-      background: var(--bg-secondary);
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .history-log h3 {
-      font-family: 'Cinzel', serif;
-      color: var(--accent-gold);
-      font-size: 0.9em;
-      margin: 0 0 8px 0;
-      text-align: center;
-    }
-
-    .history-item {
-      padding: 6px;
-      margin-bottom: 4px;
-      background: var(--bg-card);
-      border-radius: 4px;
-      border-left: 3px solid var(--accent-gold);
-      font-size: 0.8em;
-    }
-
-    .history-item .question { color: var(--text-secondary); font-style: italic; }
-    .history-item .answer { color: var(--accent-gold); font-weight: bold; }
-
     .intro-screen {
       text-align: center;
       padding: 20px 12px;
@@ -611,7 +580,6 @@
       .btn { padding: 9px 17px; margin: 3px; font-size: .8em; }
       .question-display { padding: 8px; margin-bottom: 8px; font-size: .8em; }
       .result-panel { padding: 12px; margin-top: 8px; }
-      .history-log { max-height: 116px; margin-top: 8px; }
     }
 
     @media (orientation: landscape) and (max-height: 500px) {
@@ -767,10 +735,6 @@
         <div class="character-quote" id="character-quote"></div>
       </div>
 
-      <div class="history-log" id="history-log">
-        <h3>📜 Consultas</h3>
-        <div id="history-content"></div>
-      </div>
     </div>
   </div>
 </div>
@@ -778,7 +742,6 @@
   if (new URLSearchParams(window.location.search).has('embedded')) document.body.classList.add('embedded');
   let shells = [];
   let isThrown = false;
-  let history = [];
   let currentMode = 'sucupira';
   const TOTAL_SHELLS = 16;
 
@@ -1047,14 +1010,6 @@
       requestPersonalReading(questionText, odu, openCount, interpretation);
     }
 
-    history.unshift({
-      question: questionText,
-      odu: odu.name,
-      openCount: openCount,
-      mode: currentMode
-    });
-
-    updateHistory();
   }
 
   function escapeHtml(text) {
@@ -1091,17 +1046,6 @@
       document.getElementById('character-quote').innerHTML =
         '<span class="speaker">A mesa respondeu:</span><br>“A leitura profunda não pôde chegar agora; acolha o sentido simbólico do Odu que se abriu.”';
     }
-  }
-
-  function updateHistory() {
-    const historyContent = document.getElementById('history-content');
-    historyContent.innerHTML = history.slice(0, 5).map((item, index) => 
-      '<div class="history-item">' +
-        '<div class="question">' + (index + 1) + '. ' + (item.mode === 'pessoal' ? '✨' : '🏛️') + ' ' + 
-        item.question.substring(0, 40) + (item.question.length > 40 ? '...' : '') + '</div>' +
-        '<div class="answer">→ ' + item.odu + ' (' + item.openCount + ' abertos)</div>' +
-      '</div>'
-    ).join('');
   }
 
   function resetGame() {
