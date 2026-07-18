@@ -624,21 +624,25 @@
 
     /* Quando aberto dentro do O Bem-Amado, o título já existe na página-pai.
        Tiramos a repetição e devolvemos esse espaço para uma leitura confortável. */
-    body.embedded .header { display: none; }
-    body.embedded #buzios-app { padding-top: 10px; }
+    body.embedded .header,
+    body.embedded .scene-container { display: none; }
+    body.embedded #buzios-app { padding-top: 12px; }
     @media (max-width: 600px) and (orientation: portrait) {
-      body.embedded .scene-container { padding: 10px 12px; }
-      body.embedded .scene-title { font-size: 1.08em; }
-      body.embedded .scene-description { font-size: .9em; line-height: 1.38; }
-      body.embedded .mode-btn { padding: 8px 15px; font-size: .82em; }
-      body.embedded .question-section { padding: 12px; }
-      body.embedded .question-label { font-size: .9em; }
-      body.embedded .question-select { padding-block: 11px; }
-      body.embedded .custom-question-input { min-height: 56px; padding: 11px 12px; }
-      body.embedded .shell-legend { font-size: .86em; }
-      body.embedded .stat-value { font-size: 1.28em; }
-      body.embedded .stat-label { font-size: .76em; }
-      body.embedded .btn { padding: 10px 20px; font-size: .88em; }
+      body.embedded .mode-toggle { gap: 10px; margin: 0 0 12px; }
+      body.embedded .mode-btn { flex: 1; min-height: 46px; padding: 9px 12px; font-size: .9em; }
+      body.embedded .question-section { padding: 14px; margin-bottom: 10px; }
+      body.embedded .question-label { font-size: 1em; margin-bottom: 9px; }
+      body.embedded .question-select { min-height: 52px; padding: 12px 34px 12px 13px; font-size: 17px; }
+      body.embedded .custom-question-input { min-height: 68px; padding: 13px; font-size: 17px; }
+      body.embedded .question-display { padding: 10px 12px; font-size: .96em; }
+      body.embedded .shell-legend { gap: 18px; margin: 10px 0 8px; font-size: .96em; }
+      body.embedded .legend-shell { width: 12px; height: 17px; }
+      body.embedded .buzios-table { width: 220px; height: 220px; margin: 8px auto 10px; }
+      body.embedded .buzios-table-inner { width: 186px; height: 186px; }
+      body.embedded .stats-bar { gap: 20px; padding: 10px; }
+      body.embedded .stat-value { font-size: 1.4em; }
+      body.embedded .stat-label { font-size: .82em; }
+      body.embedded .btn { min-height: 46px; padding: 10px 21px; font-size: .92em; }
     }
   </style>
 </head>
