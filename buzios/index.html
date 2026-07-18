@@ -621,6 +621,25 @@
       .intro-screen { padding: 10px; }
       .scene-container { padding: 8px; margin-bottom: 8px; }
     }
+
+    /* Quando aberto dentro do O Bem-Amado, o título já existe na página-pai.
+       Tiramos a repetição e devolvemos esse espaço para uma leitura confortável. */
+    body.embedded .header { display: none; }
+    body.embedded #buzios-app { padding-top: 10px; }
+    @media (max-width: 600px) and (orientation: portrait) {
+      body.embedded .scene-container { padding: 10px 12px; }
+      body.embedded .scene-title { font-size: 1.08em; }
+      body.embedded .scene-description { font-size: .9em; line-height: 1.38; }
+      body.embedded .mode-btn { padding: 8px 15px; font-size: .82em; }
+      body.embedded .question-section { padding: 12px; }
+      body.embedded .question-label { font-size: .9em; }
+      body.embedded .question-select { padding-block: 11px; }
+      body.embedded .custom-question-input { min-height: 56px; padding: 11px 12px; }
+      body.embedded .shell-legend { font-size: .86em; }
+      body.embedded .stat-value { font-size: 1.28em; }
+      body.embedded .stat-label { font-size: .76em; }
+      body.embedded .btn { padding: 10px 20px; font-size: .88em; }
+    }
   </style>
 </head>
 <body>
@@ -752,6 +771,7 @@
   </div>
 </div>
 <script>
+  if (new URLSearchParams(window.location.search).has('embedded')) document.body.classList.add('embedded');
   let shells = [];
   let isThrown = false;
   let history = [];
