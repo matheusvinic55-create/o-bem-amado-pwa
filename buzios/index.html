@@ -728,6 +728,59 @@
   let currentMode = 'sucupira';
   const TOTAL_SHELLS = 16;
 
+  // Som gerado no próprio navegador: uma batida grave curta e conchas se chocando.
+  // Não usa arquivo externo, por isso continua leve e disponível offline.
+  let ritualAudioContext;
+
+  function getRitualAudio() {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return null;
+    ritualAudioContext = ritualAudioContext || new AudioContext();
+    if (ritualAudioContext.state === 'suspended') ritualAudioContext.resume();
+    return ritualAudioContext;
+  }
+
+  function playShellThrowSound() {
+    const ctx = getRitualAudio();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+
+    // Toque grave, inspirado em um atabaque distante.
+    const drum = ctx.createOscillator();
+    const drumGain = ctx.createGain();
+    drum.type = 'sine';
+    drum.frequency.setValueAtTime(124, now);
+    drum.frequency.exponentialRampToValueAtTime(64, now + 0.22);
+    drumGain.gain.setValueAtTime(0.0001, now);
+    drumGain.gain.exponentialRampToValueAtTime(0.18, now + 0.012);
+    drumGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
+    drum.connect(drumGain).connect(ctx.destination);
+    drum.start(now);
+    drum.stop(now + 0.31);
+
+    // Estalos irregulares dão a sensação de os 16 búzios caindo na mesa.
+    for (let i = 0; i < 13; i++) {
+      const hitAt = now + 0.04 + i * 0.052 + Math.random() * 0.025;
+      const buffer = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 0.055), ctx.sampleRate);
+      const noise = buffer.getChannelData(0);
+      for (let j = 0; j < noise.length; j++) noise[j] = (Math.random() * 2 - 1) * (1 - j / noise.length);
+
+      const source = ctx.createBufferSource();
+      const filter = ctx.createBiquadFilter();
+      const gain = ctx.createGain();
+      source.buffer = buffer;
+      filter.type = 'bandpass';
+      filter.frequency.value = 1500 + Math.random() * 1500;
+      filter.Q.value = 1.2;
+      gain.gain.setValueAtTime(0.0001, hitAt);
+      gain.gain.exponentialRampToValueAtTime(0.045 + Math.random() * 0.025, hitAt + 0.004);
+      gain.gain.exponentialRampToValueAtTime(0.0001, hitAt + 0.055);
+      source.connect(filter).connect(gain).connect(ctx.destination);
+      source.start(hitAt);
+      source.stop(hitAt + 0.06);
+    }
+  }
+
   const oduDatabaseSucupira = {
     '0': { name: 'Okana', meaning: 'Iniciativa e Novo Começo', orixa: 'Ogum', interpretation: 'É hora de agir com coragem. O cemitério será construído, mas não da forma que Odorico imagina. A morte virá de onde menos se espera.', quote: { speaker: 'Odorico', text: 'Vote num homem sério e ganhe um cemitério!' } },
     '1': { name: 'Eji Oko', meaning: 'Dualidade e Conflito', orixa: 'Ibeji', interpretation: 'Dois caminhos se apresentam. Zeca Diabo e Odorico estão ligados pelo destino. Um morrerá nas mãos do outro.', quote: { speaker: 'Zeca Diabo', text: 'Líquidei toda a raça do coronel...' } },
@@ -862,6 +915,8 @@
     }
 
     if (isThrown) return;
+
+    playShellThrowSound();
 
     const throwBtn = document.getElementById('throw-btn');
     throwBtn.disabled = true;
