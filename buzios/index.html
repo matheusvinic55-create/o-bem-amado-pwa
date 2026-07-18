@@ -584,6 +584,36 @@
       .shell { width: 22px; height: 28px; font-size: 8px; }
     }
 
+    /* Régua compacta para o PWA no iPhone: leitura boa, sem virar uma página interminável. */
+    @media (max-width: 600px) and (orientation: portrait) {
+      #buzios-app { padding: 8px 10px max(10px, env(safe-area-inset-bottom)); }
+      .header { padding-bottom: 8px; margin-bottom: 8px; }
+      .header h1 { font-size: 1.18em; letter-spacing: .5px; }
+      .header .subtitle { font-size: .76em; margin-top: 2px; }
+      .header .author { font-size: .65em; }
+      .scene-container { padding: 8px 10px; margin-bottom: 8px; }
+      .scene-title { font-size: .92em; margin-bottom: 3px; }
+      .scene-description { font-size: .76em; line-height: 1.28; }
+      .mode-toggle { gap: 6px; margin-bottom: 8px; }
+      .mode-btn { padding: 6px 12px; font-size: .72em; }
+      .question-section { padding: 10px; margin-bottom: 8px; }
+      .question-label { font-size: .75em; margin-bottom: 6px; }
+      .question-select { padding: 9px 28px 9px 10px; margin-bottom: 0; }
+      .custom-question-input { min-height: 46px; padding: 9px 10px; }
+      .shell-legend { gap: 13px; margin: 6px 0; font-size: .72em; }
+      .legend-shell { width: 10px; height: 14px; }
+      .buzios-table { width: 210px; height: 210px; margin: 8px auto; border-width: 2px; }
+      .buzios-table-inner { width: 180px; height: 180px; }
+      .stats-bar { gap: 16px; margin: 8px 0; padding: 7px; }
+      .stat-value { font-size: 1.15em; }
+      .stat-label { font-size: .68em; }
+      .controls { margin: 8px 0; }
+      .btn { padding: 9px 17px; margin: 3px; font-size: .8em; }
+      .question-display { padding: 8px; margin-bottom: 8px; font-size: .8em; }
+      .result-panel { padding: 12px; margin-top: 8px; }
+      .history-log { max-height: 116px; margin-top: 8px; }
+    }
+
     @media (orientation: landscape) and (max-height: 500px) {
       .buzios-table { width: 180px; height: 180px; }
       .buzios-table-inner { width: 150px; height: 150px; }
@@ -864,8 +894,8 @@
     container.innerHTML = '';
     shells = [];
 
-    const tableSize = window.innerWidth < 375 ? 170 : (window.innerHeight > 800 ? 220 : 200);
-    const shellSize = window.innerWidth < 375 ? 18 : (window.innerHeight > 800 ? 22 : 20);
+    const tableSize = container.clientWidth || 200;
+    const shellSize = Math.max(16, Math.round(tableSize * 0.1));
     const center = tableSize / 2;
     const radius = center * 0.7;
 
@@ -941,8 +971,8 @@
           const currentTop = parseFloat(shell.element.style.top);
           const newX = currentLeft + (Math.random() - 0.5) * 25;
           const newY = currentTop + (Math.random() - 0.5) * 25;
-          const tableSize = window.innerWidth < 375 ? 170 : (window.innerHeight > 800 ? 220 : 200);
-          const shellSize = window.innerWidth < 375 ? 18 : (window.innerHeight > 800 ? 22 : 20);
+          const tableSize = document.getElementById('shells-container').clientWidth || 200;
+          const shellSize = Math.max(16, Math.round(tableSize * 0.1));
           shell.element.style.left = Math.max(5, Math.min(tableSize - shellSize - 5, newX)) + 'px';
           shell.element.style.top = Math.max(5, Math.min(tableSize - shellSize * 1.3 - 5, newY)) + 'px';
 
