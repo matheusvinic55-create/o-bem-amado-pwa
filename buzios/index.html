@@ -443,44 +443,196 @@
     }
 
     .intro-screen {
+      position: relative;
+      isolation: isolate;
+      width: min(660px, 100%);
+      min-height: min(600px, calc(100dvh - 24px));
+      margin: 0 auto;
+      padding: clamp(24px, 5vw, 42px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       text-align: center;
-      padding: 20px 12px;
+      overflow: hidden;
+      border: 1px solid rgba(212,168,67,.38);
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(212,168,67,.13), transparent 38%),
+        linear-gradient(145deg, rgba(61,35,20,.88), rgba(25,14,9,.96) 70%);
+      box-shadow:
+        0 18px 42px rgba(0,0,0,.36),
+        inset 0 1px 0 rgba(245,230,200,.08),
+        inset 0 0 60px rgba(0,0,0,.16);
+    }
+
+    .intro-screen::before,
+    .intro-screen::after {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      width: 86px;
+      height: 86px;
+      border: 1px solid rgba(212,168,67,.17);
+      transform: rotate(45deg);
+    }
+
+    .intro-screen::before { top: -52px; left: -52px; }
+    .intro-screen::after { right: -52px; bottom: -52px; }
+
+    .intro-symbol {
+      width: 46px;
+      height: 46px;
+      margin: 0 auto 13px;
+      display: grid;
+      place-items: center;
+      color: var(--accent-gold);
+      border: 1px solid rgba(212,168,67,.45);
+      border-radius: 50%;
+      background: rgba(12,7,4,.42);
+      box-shadow: 0 0 0 7px rgba(212,168,67,.045), 0 8px 22px rgba(0,0,0,.28);
+    }
+
+    .intro-symbol svg { width: 26px; height: 26px; }
+
+    .intro-kicker,
+    .guides-label {
+      display: block;
+      font-family: 'Cinzel', serif;
+      color: var(--text-secondary);
+      font-size: .66em;
+      font-weight: 700;
+      letter-spacing: .2em;
+      text-transform: uppercase;
     }
 
     .intro-screen h2 {
       font-family: 'Cinzel', serif;
       color: var(--accent-gold);
-      font-size: 1.3em;
-      margin-bottom: 10px;
+      font-size: clamp(1.65em, 5.2vw, 2.15em);
+      line-height: 1.08;
+      letter-spacing: .045em;
+      margin: 8px 0 12px;
+      text-shadow: 0 3px 16px rgba(0,0,0,.52);
     }
 
-    .intro-screen p {
+    .intro-lead {
+      color: var(--text-primary);
+      line-height: 1.48;
+      max-width: 520px;
+      margin: 0 auto;
+      font-size: 1.04em;
+    }
+
+    .intro-lead strong { color: #efd279; font-weight: 600; }
+
+    .consultation-paths {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin: 18px auto 22px;
+    }
+
+    .consultation-paths span {
+      padding: 6px 10px;
+      border: 1px solid rgba(212,168,67,.22);
+      border-radius: 999px;
+      background: rgba(13,7,5,.38);
+      color: #d8c6a3;
+      font-size: .76em;
+      line-height: 1;
+    }
+
+    .guides-panel {
+      padding-top: 16px;
+      border-top: 1px solid rgba(212,168,67,.2);
+    }
+
+    .guides-label { color: #bfa875; }
+
+    .guides-note {
       color: var(--text-secondary);
-      line-height: 1.6;
-      max-width: 100%;
-      margin: 0 auto 12px auto;
-      font-size: 0.9em;
+      font-size: .78em;
+      line-height: 1.35;
+      margin-top: 4px;
     }
 
     .character-list {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7px;
       max-width: 100%;
-      margin: 12px auto;
-      text-align: left;
+      margin: 11px auto 0;
+      text-align: center;
     }
 
     .character-item {
-      padding: 6px 8px;
-      background: var(--bg-card);
-      border-radius: 6px;
-      border-left: 3px solid var(--accent-terracota);
-      font-size: 0.8em;
+      min-width: 0;
+      padding: 9px 6px 8px;
+      background: rgba(61,35,20,.56);
+      border: 1px solid rgba(212,168,67,.13);
+      border-radius: 9px;
+      box-shadow: inset 0 1px 0 rgba(245,230,200,.04);
     }
 
-    .character-item .name { color: var(--accent-gold); font-weight: bold; }
-    .character-item .role { color: var(--text-secondary); font-size: 0.8em; }
+    .character-item .name {
+      display: block;
+      overflow: hidden;
+      color: #d8b75b;
+      font-size: .82em;
+      font-weight: 600;
+      line-height: 1.1;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .character-item .role {
+      display: block;
+      margin-top: 3px;
+      color: var(--text-secondary);
+      font-size: .67em;
+      line-height: 1.1;
+    }
+
+    .intro-action { margin-top: 22px; }
+
+    .intro-start {
+      position: relative;
+      width: min(310px, 100%);
+      min-height: 56px;
+      margin: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      border: 1px solid #f1cc68;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #e6bc4e, #c8922b);
+      box-shadow: 0 9px 24px rgba(212,168,67,.22), inset 0 1px 0 rgba(255,247,211,.52);
+      font-size: .93em;
+      font-weight: 700;
+    }
+
+    .intro-start::before {
+      content: '';
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      background: #fff0a5;
+      box-shadow: -5px -2px 0 0 #d6a53a inset, 0 0 12px rgba(255,231,126,.48);
+      transform: rotate(-18deg);
+    }
+
+    .intro-start:hover { background: linear-gradient(135deg, #f0ca62, #d29d32); }
+    .intro-start:focus-visible { outline: 2px solid #f5e6c8; outline-offset: 4px; }
+
+    .intro-assurance {
+      display: block;
+      margin-top: 8px;
+      color: #9f8968;
+      font-size: .7em;
+      letter-spacing: .035em;
+    }
 
     .fade-in { animation: fadeIn 0.5s ease; }
 
@@ -543,7 +695,10 @@
       .buzios-table { width: 210px; height: 210px; }
       .buzios-table-inner { width: 170px; height: 170px; }
       .shell { width: 18px; height: 24px; font-size: 6px; }
-      .character-list { grid-template-columns: 1fr; }
+      .intro-screen { padding: 22px 15px; }
+      .character-list { gap: 5px; }
+      .character-item { padding-inline: 4px; }
+      .character-item .name { font-size: .75em; }
       .btn { padding: 8px 18px; font-size: 0.85em; }
     }
 
@@ -580,6 +735,21 @@
       .btn { padding: 9px 17px; margin: 3px; font-size: .8em; }
       .question-display { padding: 8px; margin-bottom: 8px; font-size: .8em; }
       .result-panel { padding: 12px; margin-top: 8px; }
+      .intro-screen {
+        min-height: min(580px, calc(100dvh - 18px));
+        padding: clamp(22px, 6vw, 30px) clamp(15px, 5vw, 24px);
+        border-radius: 14px;
+      }
+      .intro-symbol { width: 42px; height: 42px; margin-bottom: 11px; }
+      .intro-screen h2 { margin-top: 7px; margin-bottom: 10px; }
+      .intro-lead { font-size: 1em; line-height: 1.42; }
+      .consultation-paths { margin: 15px auto 18px; gap: 5px; }
+      .consultation-paths span { padding: 6px 8px; font-size: .7em; }
+      .guides-panel { padding-top: 14px; }
+      .guides-note { font-size: .73em; }
+      .character-list { margin-top: 9px; }
+      .intro-action { margin-top: 19px; }
+      .intro-start { min-height: 54px; font-size: .88em; }
     }
 
     @media (orientation: landscape) and (max-height: 500px) {
@@ -595,6 +765,7 @@
     body.embedded .header,
     body.embedded .scene-container { display: none; }
     body.embedded #buzios-app { padding-top: 12px; }
+    body.embedded .intro-screen { min-height: min(590px, calc(100dvh - 24px)); }
     @media (max-width: 600px) and (orientation: portrait) {
       body.embedded .mode-toggle { gap: 10px; margin: 0 0 12px; }
       body.embedded .mode-btn { flex: 1; min-height: 46px; padding: 9px 12px; font-size: .9em; }
@@ -625,33 +796,52 @@
     </div>
 
     <div id="intro-screen" class="intro-screen">
+      <div class="intro-symbol" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M7 24c1-8 5-14 12-18 3 5 5 10 4 16-1 5-5 7-9 6-4-1-7-2-7-4Z"/>
+          <path d="M11 22c3-6 6-10 8-12M13 25c2-4 4-7 8-10"/>
+        </svg>
+      </div>
+      <span class="intro-kicker">O oráculo de Sucupira</span>
       <h2>Casa de Búzios</h2>
-      <p>
-        Os orixás de Sucupira estão prontos para responder.
-        Consulte sobre os personagens da novela <strong>ou sobre sua própria vida.</strong>
+      <p class="intro-lead">
+        Entre na roda e formule sua pergunta. A consulta pode atravessar
+        <strong>Sucupira, seus personagens ou os caminhos da sua própria vida.</strong>
       </p>
-      <div class="character-list">
-        <div class="character-item">
-          <span class="name">Odorico</span> — <span class="role">Prefeito</span>
-        </div>
-        <div class="character-item">
-          <span class="name">Zeca Diabo</span> — <span class="role">Cangaceiro</span>
-        </div>
-        <div class="character-item">
-          <span class="name">Dulcinéia</span> — <span class="role">Romântica</span>
-        </div>
-        <div class="character-item">
-          <span class="name">Dirceu</span> — <span class="role">Borboletas</span>
-        </div>
-        <div class="character-item">
-          <span class="name">Neco</span> — <span class="role">Jornalista</span>
-        </div>
-        <div class="character-item">
-          <span class="name">Juarez</span> — <span class="role">Médico</span>
+      <div class="consultation-paths" aria-label="Caminhos possíveis da consulta">
+        <span>A cidade</span>
+        <span>Os personagens</span>
+        <span>Sua vida</span>
+      </div>
+
+      <div class="guides-panel">
+        <span class="guides-label">Vozes de Sucupira</span>
+        <p class="guides-note">Presenças da novela que acompanham esta experiência.</p>
+        <div class="character-list">
+          <div class="character-item">
+            <span class="name">Odorico</span><span class="role">Prefeito</span>
+          </div>
+          <div class="character-item">
+            <span class="name">Zeca Diabo</span><span class="role">Cangaceiro</span>
+          </div>
+          <div class="character-item">
+            <span class="name">Dulcinéia</span><span class="role">Romântica</span>
+          </div>
+          <div class="character-item">
+            <span class="name">Dirceu</span><span class="role">Borboletas</span>
+          </div>
+          <div class="character-item">
+            <span class="name">Neco</span><span class="role">Jornalista</span>
+          </div>
+          <div class="character-item">
+            <span class="name">Juarez</span><span class="role">Médico</span>
+          </div>
         </div>
       </div>
-      <div style="margin-top: 20px;">
-        <button class="btn btn-primary" onclick="startGame()">🌙 Iniciar</button>
+
+      <div class="intro-action">
+        <button class="btn btn-primary intro-start" onclick="startGame()">Iniciar consulta</button>
+        <span class="intro-assurance">16 búzios revelarão o Odu da vez</span>
       </div>
     </div>
 
