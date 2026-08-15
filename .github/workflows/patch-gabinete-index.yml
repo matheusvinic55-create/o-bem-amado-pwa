@@ -1,0 +1,52 @@
+name: Patch Gabinete UI
+
+on:
+  push:
+    paths:
+      - .github/patch-gabinete-trigger.txt
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Atualizar textos do Gabinete para capítulo 140
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          index = Path('index.html')
+          text = index.read_text(encoding='utf-8')
+          replacements = {
+              'sem spoilers depois do capítulo 120.': 'sem spoilers depois do capítulo 140.',
+              'Explique o que está acontecendo até o capítulo 120 sem spoilers posteriores.': 'Explique o que está acontecendo até o capítulo 140 sem spoilers posteriores.',
+              'O gabinete guarda sigilo sobre tudo depois do capítulo 120.': 'O gabinete guarda sigilo sobre tudo depois do capítulo 140.',
+              'Até o capítulo 120, essa escolha segue pressionada por todos os lados.': 'Até o capítulo 140, essa escolha segue pressionada por todos os lados.',
+              'acontecimentos até o capítulo 120 ou transformar sua frase em odoriquês': 'acontecimentos até o capítulo 140 ou transformar sua frase em odoriquês',
+          }
+          missing = [old for old in replacements if old not in text]
+          if missing:
+              raise SystemExit('Textos não encontrados em index.html: ' + repr(missing))
+          for old, new in replacements.items():
+              text = text.replace(old, new)
+          index.write_text(text, encoding='utf-8')
+
+          sw = Path('sw.js')
+          if sw.exists():
+              sw_text = sw.read_text(encoding='utf-8')
+              sw_text = sw_text.replace("const CACHE='sucupira-v37';", "const CACHE='sucupira-v38';")
+              sw.write_text(sw_text, encoding='utf-8')
+          PY
+
+      - name: Commit e push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html sw.js
+          git commit -m "Atualiza textos do Gabinete para capítulo 140" || exit 0
+          git push
